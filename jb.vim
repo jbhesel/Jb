@@ -169,6 +169,6 @@ command! -nargs=1 Jl call JbFzLink(<f-args>)
 nnoremap <leader>jb :call JbBrows('')<cr>
 nnoremap <leader>je :call JbFzEdit('')<cr>
 nnoremap <leader>jl :call JbFzLink('')<cr>
-nnoremap <leader>jr :call JbGrep('')<cr>
+nnoremap <leader>jr :call JbFzGrep('')<cr>
 " Jbhesel end ------------------------------------------------------------------
 
