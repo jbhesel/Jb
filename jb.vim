@@ -40,7 +40,7 @@ fun! JbExpandArg(arg, expand) " replace argument, if missing
     " this is used, when calling a function with an empty argument or '.' as
     " arg. The argument is replaced by the <cword>, <cWORD>, <cfile> or with
     " the current line when expand is '.'.
-    " eg JbExpand('', '<cword>') returns the word at the cursor position.
+    " eg JbExpand('', '<cword>') rGeturns the word at the cursor position.
     " This helps to programm a shortcut.
     let l:arg=a:arg
     if (l:arg == '') || (l:arg=='.')
@@ -102,7 +102,7 @@ fun! JbBrows(url) " open url in Browser  Jb
         let l:url = matchstr(l:url,'http[a-z0-9#.:\/?=_-]*')
     endif
     echo l:url
-    silent exec "!".g.Jb_browser." '".l:url."'"
+    silent exec "!".g:Jb_browser." '".l:url."'"
 endfun
 " :Jb https://google.com
 " :call JbBrows('https://google.com')
@@ -116,7 +116,14 @@ fun! JbFzEdit(fileAndAnchor) " edit first matching file in vimlog (and find #anc
         let l:fneedle = ''
     endif
     let l:needle = parts[1]
-    call JbOneLog(g:Jb_logfname, l:fneedle) " file 
+    let l:fileArr = JbOneLog(g:Jb_logfname, l:fneedle) " file 
+    if len(l:fileArr) is 1 " no file matched, only EOF
+        let l:fileArr = JbOneLog(g:Jb_logfname, '') " search in all files
+        if l:needle == '.'
+            let l:needle = l:fneedle
+        endif
+        echo "swap"
+    endif
     if l:needle == '.'
         let l:anzahl = ' -m 1'
     else
@@ -129,8 +136,18 @@ endfun
 " :Je night             files containing "night"
 " :Je night#alpenglow   grep "alpenglow" in files containing "night"
 " :Je .#alpenglow       grep "alpenglow" in all edited files
+" :Je alpenglow         grep "alpenglow" in all edited files, because no files match
 " :Je .                 use cursorword als search element as in the lines above
 " <space>e              same as ":Je ."
+
+fun! JbFzGrep(needle) " seach in edited files
+    " almost same as JbFzEdit, but ommitting the hashtag greps in all files.
+    let l:needle = JbExpandArg(a:needle,'<cfile>')
+    if stridx(l:needle,'#') == -1
+        let l:needle = '.#'. l:needle
+    endif
+    call JbFzEdit(l:needle)
+endfun
 
 fun! JbFzLink(needle) " list matching Md-links, call Browser with selection Jb
     let l:needle = JbExpandArg(a:needle,'<cfile>')
@@ -147,64 +164,11 @@ endfun
 
 command! -nargs=1 Jb call JbBrows(<f-args>)
 command! -nargs=1 Je call JbFzEdit(<f-args>)
+command! -nargs=1 Jr call JbFzGrep(<f-args>)
 command! -nargs=1 Jl call JbFzLink(<f-args>)
 nnoremap <leader>jb :call JbBrows('')<cr>
 nnoremap <leader>je :call JbFzEdit('')<cr>
 nnoremap <leader>jl :call JbFzLink('')<cr>
-nnoremap <space>b   :call JbFzBrows('')<cr>
-nnoremap <space>e   :call JbFzEdit('')<cr>
-nnoremap <space>l   :call JbFzLink('')<cr> 
-" shortcut for saving this file and reread it
-nnoremap <space>y  :w<cr>:source init.vim<cr>
-" :Jl Peterson    show list of markdown links with Peterson and open in Browser
-" :Je vetapi      all files, containing 'vetapi'
-" :Je qlib#fromTo grep in 'qlib'-files for 'fromTo'
-" :Je .#notify    grep 'notify' in all files
-"
-" # Bookmarks for edited files
-
-" vim.log gets a line for every writing of a file
-
-" JbEdit uses the vim.log to find matching files and fzf to find text inside those
-" files. You type ":Je init.vim#fzf" and you will be shown your vimrc and the
-" positions of the string fzf. 
-
-" You could also write a bookmark in an arbitrary file and link to "init.vim#fzf" 
-" by putting your cursor on that text and start the function with ":Je ." or
-" <leader>je.
-
-" The bookmark has two parts. The first part is a search expression for the file
-" The second part is the text, that is search in these files. If you use a dot for
-" one part, it is a wild card for all. ".#matrix" searches for matrix in all the 
-" files. "matrix#." lists the first line of all files. You can omit the following
-" "#.". "matrix" shows all files containing matrix in filename or path.
-
-" The workflow is similar to google the web, exept the database are all your edited
-" files.
-
-" I don't use the shada file of vim with the history of all visited files,
-" because this also has all files I only have read.
-" Maybe this could be an extra function. I would increase the amount of remembered
-" files with "set viminfo='100,<50,s10,h" to get a list of theses files in 
-" vimscript you can use v:oldfiles.
-
-" # Bookmarks for WWW in markdown.
-
-" The plugin assumes, you put all interesting Internetsites in a Markdownfile
-" You type ":Jl junegunn" and will see all your bookmarks, that contain junegunn
-" in the url or the text to this url on the same line. With <cr> you start
-" browsing this website.
-
-" # Dependencies
-"
-" vim plugin .#junegunn/fzf
-" shell programm .#ripgrep
-
-" TODO: I would like to save all my visited websites and store the information,
-" that I have read. Maybe a screenreader could help, not reading but writing 
-" the text-Information of the website. I am testing a plugin, that scrape markdown
-" from a website.
-" I would like to have the subtitles of all youtube videos, that I have seen.
-" TODO: enaple cnext cprev to jump from on occasion to another
+nnoremap <leader>jr :call JbGrep('')<cr>
 " Jbhesel end ------------------------------------------------------------------
 

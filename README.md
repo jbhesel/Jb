@@ -1,5 +1,29 @@
 # Bookmarks for edited files
 
+# Installation
+
+Copy jb.vim to your computer and source it via .vimrc.
+
+# Configuration
+
+    let g:Jb_Linkfname = '/qsx/intra/2020/vimwiki/jbarbeit.md'
+    let g:Jb_browser = 'brave-browser'
+    let g:Jb_logfname = '/home/'.$USER.'/vim.log' " eg /home/jb/vim.log
+    let g:Jb_tmpfname = '/tmp/jb.tmp'
+
+The Jb_Linkfname determines, where to find the Markdown-links.
+The jb_browser defines, wichbrowser ist started.
+
+If you like the plugin, you want to invoke the functions really fast. 
+I put the shortcuts this way:
+
+    nnoremap <space>b   :call JbFzBrows('')<cr>
+    nnoremap <space>e   :call JbFzEdit('')<cr>
+    nnoremap <space>l   :call JbFzLink('')<cr> 
+    nnoremap <space>r   :call JbFzGrep('')<cr> 
+
+# How it works
+
 This plugin writes a line with path and filename in the file vim.log every time you save a file.
 
 JbEdit uses the vim.log to find useful information.
@@ -11,14 +35,18 @@ positions of the string fzf.
 ![initvim-junegunn](jb-initvim-junegunn.png)
 
 You could also write a bookmark in an arbitrary file and link to "init.vim#fzf" 
-by putting your cursor on that text and start the function with ":Je ." or
-<leader>je.
+by putting your cursor on that text and start the function with ":Je ."
 
 The bookmark has two parts. The first part is a search expression for the file
 The second part is the text, that is search in these files. If you use a dot for
 one part, it is a wild card for all. ".#matrix" searches for matrix in all the 
 files. "matrix#." lists the first line of all files. You can omit the following
 "#.". "matrix" shows all files containing matrix in filename or path.
+
+":Jr" is the same function, except it assumes to grep your word in all files
+if the # is missing.
+:Jr matrix  searches in all edited files for "matrix". Or you place the cursor
+over the word matrix and start the funktion :Jr .&lt;enter&gt;
 
 The workflow is similar to google the web, exept the database are all your edited
 files.
