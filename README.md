@@ -8,6 +8,7 @@ The command for this action is named ":Je" for JbEdit.
 
 You type ":Je init.vim#fzf" and you will be shown your vimrc and the
 positions of the string fzf. 
+![initvim-junegunn](jb-initvim-junegunn.png)
 
 You could also write a bookmark in an arbitrary file and link to "init.vim#fzf" 
 by putting your cursor on that text and start the function with ":Je ." or
