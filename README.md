@@ -48,6 +48,7 @@ if the # is missing.
 :Jr matrix  searches in all edited files for "matrix". Or you place the cursor
 over the word matrix and start the funktion :Jr .&lt;enter&gt;
 
+![gif How it works](jbvim-je1.gif)
 The workflow is similar to google the web, exept the database are all your edited
 files.
 
