@@ -1,11 +1,12 @@
-# Jb
-
 # Bookmarks for edited files
 
-vim.log gets a line for every writing of a file
+This plugin writes a line with path and filename in the file vim.log every time you save a file.
 
-JbEdit uses the vim.log to find matching files and fzf to find text inside those
-files. You type ":Je init.vim#fzf" and you will be shown your vimrc and the
+JbEdit uses the vim.log to find useful information.
+You can either search for filenames or paths and/or for content in those files.
+The command for this action is named ":Je" for JbEdit.
+
+You type ":Je init.vim#fzf" and you will be shown your vimrc and the
 positions of the string fzf. 
 
 You could also write a bookmark in an arbitrary file and link to "init.vim#fzf" 
