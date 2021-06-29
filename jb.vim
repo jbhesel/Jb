@@ -96,7 +96,7 @@ autocmd! BufWritePost * call JbVimlogWrite()
 fun! JbBrows(url) " open url in Browser  Jb
     " open browser with url as the argument or the current line if url is '.' or ''
     let l:url = JbExpandArg(a:url,'<cline>')
-    if strIdx(l:url,'http') == -1 "
+    if stridx(l:url,'http') == -1 "
         let l:url = 'https://' . l:url
     else
         let l:url = matchstr(l:url,'http[a-z0-9#.:\/?=_-]*')
