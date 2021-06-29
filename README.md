@@ -36,5 +36,5 @@ browsing this website.
 
 # Dependencies
 
-vim plugin .#junegunn/fzf
-shell programm .#ripgrep
+- vim plugin .#junegunn/fzf
+- shell programm .#ripgrep
